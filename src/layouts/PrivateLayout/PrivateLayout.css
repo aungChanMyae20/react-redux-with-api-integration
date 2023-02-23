@@ -1,0 +1,11 @@
+.container.ant-layout-sider {
+  background: #071D49;
+}
+
+.header.ant-layout-header {
+  background: transparent;
+}
+
+main.ant-layout-content {
+  padding: 25px 35px;
+}

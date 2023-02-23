@@ -1,0 +1,18 @@
+.sidebar-container {
+  background: transparent;
+  margin-top: 5rem;
+}
+
+li.ant-menu-item-active::after,
+li.ant-menu-item-selected::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  height: 100%;
+  background: #8A5D24;
+  width: 3px;
+}
+
+li.ant-menu-item-selected span.ant-menu-title-content a {
+  font-weight: 600;
+}

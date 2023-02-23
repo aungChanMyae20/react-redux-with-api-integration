@@ -1,0 +1,5 @@
+.navbar-container {
+  display: inline-flex;
+  justify-content: end;
+  width: 100%;
+}

@@ -1,0 +1,12 @@
+.chart-header {
+  margin-bottom: 15px;
+}
+
+.doughnut-container {
+  display: flex;
+}
+
+.doughnut-box {
+  margin: auto;
+  width: 250px;
+}
