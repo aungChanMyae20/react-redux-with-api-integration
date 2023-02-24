@@ -4,3 +4,14 @@ export interface EditableCellProps {
   children: React.ReactNode;
   rules: any;
 }
+
+export interface ListProps {
+  size: number
+  page: number
+}
+
+export interface PageInfoProps {
+  size: number,
+  page: number,
+  total?: number
+}

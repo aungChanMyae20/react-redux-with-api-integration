@@ -10,10 +10,10 @@ const { Header, Sider, Content } = Layout;
 const PrivateLayout = () => {
   return (
     <Layout hasSider>
-      <Sider className="container" style={{ height: '100vh' }} width={260} >
+      <Sider className="container" width={260} >
         <SideBarMenu />
       </Sider>
-      <Layout>
+      <Layout style={{ minHeight: '100vh' }}>
         <Header className="header">
           <Navbar />
         </Header>

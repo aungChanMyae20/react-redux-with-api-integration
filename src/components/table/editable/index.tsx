@@ -3,6 +3,7 @@ import { InputRef, Typography } from 'antd';
 import { Form, Input, Table } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { EmployeeEditCellProps, EmployeeProps } from '../../../interfaces/employee';
+import { ListProps, PageInfoProps } from '../../../interfaces/commons';
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -88,12 +89,16 @@ interface EditTableProps {
   title: string
   dataSource: EmployeeProps[]
   columns: any
+  pageInfo: PageInfoProps | null
+  handlePageChange: (values:ListProps) => void
 }
 
 const EditableTable: React.FC<EditTableProps> = ({
   title,
   dataSource,
-  columns
+  columns,
+  pageInfo,
+  handlePageChange
 }) => {
 
   const [data, setDate] = useState(dataSource);
@@ -120,7 +125,10 @@ const EditableTable: React.FC<EditTableProps> = ({
         columns={columns as ColumnTypes}
         pagination={{
           position: ["bottomCenter"],
-          hideOnSinglePage: true
+          hideOnSinglePage: true,
+          total: pageInfo?.total,
+          showSizeChanger: false,
+          onChange: (page:number, pageSize:number) => handlePageChange({ size: pageSize, page: page})
         }}
       />
     </div>

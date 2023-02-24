@@ -3,29 +3,29 @@ import { RootState } from '../../app/store';
 import AuthService from '../../api/auth';
 import { encryptUserInfo } from '../../helper/utils';
 import { getUserMe } from '../user/userSlice';
+import { LoggedInProps, LoginProps } from '../../interfaces/auth';
 
 export interface AuthState {
   auth: {
     isLoggedIn: boolean
-    id: string
+    user: LoggedInProps | null
   }
 }
 
 const initialState: AuthState = {
   auth: {
     isLoggedIn: false,
-    id: ''
+    user: null
   }
 }
 
 export const userLogin = createAsyncThunk(
   "auth/login",
-  async ({ data }:any, { rejectWithValue, dispatch }) => {
+  async (data:LoginProps, { rejectWithValue, dispatch }) => {
     try {
       const response = await AuthService.login(data);
       if (response.data.token) {
-        encryptUserInfo(response.data);
-        await dispatch(getUserMe({ data: response.data.id }))
+        encryptUserInfo(response.data.token);
       }
       return response.data;
     } catch (err:any) {
@@ -43,6 +43,7 @@ export const authSlice = createSlice({
     },
     loggedOut: (state) => {
       state.auth.isLoggedIn = false
+      state.auth.user = null
     }
   },
   extraReducers: {
@@ -54,7 +55,7 @@ export const authSlice = createSlice({
     [userLogin.fulfilled]: (state, action) => {
       state.loading = false;
       state.auth.isLoggedIn = true;
-      state.auth.id = action.payload.id;
+      state.auth.user = action.payload;
     },
     // @ts-expect-error
     [userLogin.rejected]: (state, action) => {

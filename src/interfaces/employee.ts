@@ -12,7 +12,7 @@ export interface UserDefaultProps {
 }
 
 export interface EmployeeProps extends UserDefaultProps {
-  id: string
+  id?: string
 }
 
 export const EmployeeInitialValues:EmployeeProps = {

@@ -20,7 +20,6 @@ const PrivateRoute:FC<Props> = ({ component: RouteComponent }) => {
     return pathname.includes(protectedPath);
   }
 
-
   if (!auth.auth.isLoggedIn && !token) {
     return <Navigate to="/login" />;
   }

@@ -1,8 +1,9 @@
 import { axiosInstance } from "..";
+import { ListProps } from "../../interfaces/commons";
 import { EmployeeProps } from "../../interfaces/employee";
 
-const getAllEmployees = () => {
-  return axiosInstance.get(`/users`);
+const getAllEmployees = ({ size, page }:ListProps) => {
+  return axiosInstance.get(`/users?size=${size}&page=${page}`);
 }
 
 const createNewEmployee = (values: EmployeeProps) => {

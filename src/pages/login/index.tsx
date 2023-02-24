@@ -13,7 +13,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values:LoginProps) => {
-    const res = await dispatch(userLogin({ data: values }))
+    const res = await dispatch(userLogin(values))
     if (res.payload.id) {
       navigate('/home')
     }

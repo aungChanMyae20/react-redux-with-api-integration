@@ -6,11 +6,10 @@ import CryptoJS from 'crypto-js';
 // import utc from 'dayjs/plugin/utc';
 
 import { KEY } from '../helper/consts';
-import { LoginProps } from '../interfaces/auth';
 
 // encrypt user info
-export const encryptUserInfo = (authData: LoginProps | { token: string}) => {
-  const authDataForLocalStorage = AES.encrypt(JSON.stringify(authData), KEY);
+export const encryptUserInfo = (token: string) => {
+  const authDataForLocalStorage = AES.encrypt(JSON.stringify(token), KEY);
   localStorage.setItem('auth', authDataForLocalStorage.toString());
 };
 

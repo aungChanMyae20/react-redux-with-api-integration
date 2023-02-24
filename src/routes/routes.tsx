@@ -7,18 +7,10 @@ import HomePage from '../pages/home';
 import ChartsPage from '../pages/chart';
 import PublicLayout from '../layouts/PublicLayout';
 import LoginPage from '../pages/login';
-// import Login from '../pages/Login';
-// import PublicLayout from '../layouts/PublicLayout';
-// import PrivateLayout from '../layouts/PrivateLayout';
-// import Employees from '../pages/employees';
-// import PageNotFound from '../pages/404';
-// import Forbidden from '../pages/403';
-// import EmployeeReport from '../pages/charts';
 
 const routes: RouteObject[] = [
   {
     path: '/',
-    // element: <PrivateRoute component={PrivateLayout} />,
     element: <PrivateRoute component={PrivateLayout} />,
     children: [
       {

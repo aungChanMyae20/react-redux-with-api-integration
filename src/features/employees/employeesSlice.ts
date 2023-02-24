@@ -2,20 +2,26 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 import { EmployeeProps } from "../../interfaces/employee";
 import EmployeesService from "../../api/employees";
+import { ListProps, PageInfoProps } from "../../interfaces/commons";
 
 export interface EmployeesState {
   employees: EmployeeProps[]
+  pageInfo: PageInfoProps
 }
 
 const initialState: EmployeesState = {
   employees: [],
+  pageInfo: {
+    page: 1,
+    size: 10,
+  }
 }
 
 export const getAllEmployees = createAsyncThunk (
   "employees/all",
-  async (_, { rejectWithValue }) => {
+  async (data:ListProps, { rejectWithValue }) => {
     try {
-      const response = await EmployeesService.getAllEmployees();
+      const response = await EmployeesService.getAllEmployees(data);
       return response.data;
     } catch (err:any) {
       return rejectWithValue(err.response.data);
@@ -25,7 +31,7 @@ export const getAllEmployees = createAsyncThunk (
 
 export const addNewEmployee = createAsyncThunk (
   "employee/new",
-  async ({ data }: any, { rejectWithValue }) => {
+  async (data: EmployeeProps, { rejectWithValue }) => {
     try {
       const response = await EmployeesService.createNewEmployee(data);
       return response.data;
@@ -37,7 +43,7 @@ export const addNewEmployee = createAsyncThunk (
 
 export const updateEmployee = createAsyncThunk (
   "employee/edit",
-  async ({ data }: any, { rejectWithValue }) => {
+  async (data: EmployeeProps, { rejectWithValue }) => {
     try {
       const response = await EmployeesService.updateEmployee(data);
       return response.data;
@@ -49,9 +55,9 @@ export const updateEmployee = createAsyncThunk (
 
 export const removeEmployee = createAsyncThunk (
   "employee/remove",
-  async ( data : any, { rejectWithValue }) => {
+  async ( id : string, { rejectWithValue }) => {
     try {
-      const response = await EmployeesService.removeEmployee(data);
+      const response = await EmployeesService.removeEmployee(id);
       return response.data;
     } catch (err:any) {
       return rejectWithValue(err.response.data);
@@ -76,6 +82,7 @@ export const employeesSlice = createSlice({
     [getAllEmployees.fulfilled]: (state, action) => {
       state.loading = false;
       state.employees = action.payload.data;
+      state.pageInfo = action.payload.pageInfo;
     },
     // @ts-expect-error
     [getAllEmployees.rejected]: (state, action) => {
@@ -89,7 +96,8 @@ export const employeesSlice = createSlice({
     // @ts-expect-error
     [addNewEmployee.fulfilled]: (state, action) => {
       state.loading = false;
-      state.employees = [ ...state.employees, action.payload ]
+      // state.employees = [ ...state.employees, action.payload ]
+      state.pageInfo.total = action.payload.total
     },
     // @ts-expect-error
     [addNewEmployee.rejected]: (state, action) => {
@@ -104,11 +112,8 @@ export const employeesSlice = createSlice({
     [updateEmployee.fulfilled]: (state, action) => {
       state.loading = false;
       const updated = action.payload;
-      console.log('updated', updated);
       state.employees = state.employees.map((item:any) => {
-        console.log(item.id === updated.id)
         if (item.id === updated.id) {
-          console.log('ai');
           return updated;
         }
         return item;
@@ -126,6 +131,7 @@ export const employeesSlice = createSlice({
     // @ts-expect-error
     [removeEmployee.fulfilled]: (state, action) => {
       state.loading = false;
+      state.pageInfo = action.payload.total
     },
     // @ts-expect-error
     [removeEmployee.rejected]: (state, action) => {
@@ -138,5 +144,6 @@ export const employeesSlice = createSlice({
 export const { clearEmployees } = employeesSlice.actions;
 
 export const selectEmployees = (state: RootState) => state.employees.employees;
+export const selectPageInfo = (state: RootState) => state.employees.pageInfo;
 
 export default employeesSlice.reducer;
