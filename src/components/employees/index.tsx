@@ -12,12 +12,13 @@ import EmployeeForm, { employeeSchemaSync } from '../forms/employee';
 import { PlusOutlined } from '@ant-design/icons';
 import './employees.css';
 import { addNewEmployee, updateEmployee } from '../../features/employees/employeesSlice';
+import { selectStoreAuth } from '../../features/auth/authSlice';
 
 const Employees:FC = () => {
 
   // const phoneReg = new RegExp(/\+65(6|8|9)\d{7}/g);
 
-  const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string, rules?: any, type?: string })[] = [
+  let defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string, rules?: any, type?: string })[] = [
     { title: 'First name', dataIndex: 'first_name', width: 180, editable: true, rules: [employeeSchemaSync],
     },
     { title: 'Last name', dataIndex: 'last_name', width: 180, editable: true, rules: [employeeSchemaSync],
@@ -70,6 +71,13 @@ const Employees:FC = () => {
 
   const allEmployees = useAppSelector(selectEmployees, shallowEqual);
   const pageInfo = useAppSelector(selectPageInfo, shallowEqual);
+  const auth = useAppSelector(selectStoreAuth, shallowEqual);
+
+  const isAdmin = auth?.auth?.user?.role === 'admin'
+
+  if (!isAdmin) {
+    defaultColumns = defaultColumns.filter((item) => item.title !== '')
+  }
 
   useEffect(() => {
     if (allEmployees.length > 0) {
@@ -85,7 +93,7 @@ const Employees:FC = () => {
       ...col,
       onCell: (record: EmployeeProps) => ({
         record,
-        editable: col.editable,
+        editable: isAdmin ? col.editable : false,
         dataIndex: col.dataIndex,
         title: col.title,
         rules: col.rules ? col.rules : null,
@@ -186,16 +194,19 @@ const Employees:FC = () => {
                 </Row>
               </Card>
             </Col>
-            <Col xs={24} md={24} lg={4} xl={4} 
-              style={{ 
-                display: 'grid', 
-                justifyContent: 'end', 
-                alignItems: 'center', 
-                paddingRight: 20 
-              }}
-            >
-              <Button type="primary" onClick={openNewForm} icon={<PlusOutlined />}>Add New Employee</Button>
-            </Col>
+            {
+              isAdmin &&
+              <Col xs={24} md={24} lg={4} xl={4} 
+                style={{ 
+                  display: 'grid', 
+                  justifyContent: 'end', 
+                  alignItems: 'center', 
+                  paddingRight: 20 
+                }}
+              >
+                <Button type="primary" onClick={openNewForm} icon={<PlusOutlined />}>Add New Employee</Button>
+              </Col>
+            }
           </Row>
         </Col>
         <Col span={24}>
