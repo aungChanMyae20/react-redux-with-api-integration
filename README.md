@@ -7,4 +7,4 @@ $ npm install
 
 $ npm start
 
-Note: Inline edit for some fields are not available yet.
+Note: Inline edit for some fields in Employees Table are not available yet.
