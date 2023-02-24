@@ -5,7 +5,7 @@ const PublicLayout = () => {
 
   return (
     <Layout>
-      <div className='public-page-container'>
+      <div>
         <Outlet />
       </div>
     </Layout>

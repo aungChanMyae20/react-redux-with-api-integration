@@ -6,6 +6,7 @@ import thunk from 'redux-thunk';
 import authReducer from '../features/auth/authSlice';
 import userReducer from '../features/user/userSlice';
 import employeesReducer from '../features/employees/employeesSlice';
+import reportsReducer from '../features/reports/reportsSlice';
 
 const persistConfig = {
   key: 'root',
@@ -15,7 +16,8 @@ const persistConfig = {
 const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
-  employees: employeesReducer
+  employees: employeesReducer,
+  reports: reportsReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

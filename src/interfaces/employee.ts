@@ -7,7 +7,7 @@ export interface UserDefaultProps {
   email: string
   phone_number: string
   gender: string
-  joined_date: Dayjs
+  joined_date: Dayjs | string | number
   role?: string
 }
 

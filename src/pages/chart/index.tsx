@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Card, Col, Row, Typography } from 'antd';
 import {
   Chart as ChartJS,
@@ -12,6 +13,10 @@ import {
 import { Bar, Doughnut } from 'react-chartjs-2';
 import './Chart.css';
 import PageHeader from '../../components/commons/pageHeader';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { getDecadeReports, selectDecadeReports } from '../../features/reports/reportsSlice';
+import { DecadeReportsProps } from '../../interfaces/reports';
+import { shallowEqual } from 'react-redux';
 
 ChartJS.register(
   ArcElement,
@@ -24,8 +29,36 @@ ChartJS.register(
 );
 
 const ChartsPage = () => {
+  const dispatch = useAppDispatch();
 
-  const options = {
+  const [decades, setDecades] = useState({});
+  const [labels, setLabels] = useState<Array<string>>([]);
+  const [values, setValues] = useState<Array<string | number>>([])
+
+  const decadeReports = async () => {
+    await dispatch(getDecadeReports())
+  }
+
+  useEffect(() => {
+    decadeReports()
+  }, [])
+
+  const decadeReportsRes = useAppSelector(selectDecadeReports, shallowEqual);
+
+  useEffect(() => {
+    if (decadeReportsRes) {
+      setDecades(decadeReportsRes.data);
+    }
+  }, [decadeReportsRes])
+
+  useEffect(() => {
+    if (decades) {
+      setLabels(Object.keys(decades))
+      setValues(Object.values(decades))
+    }
+  }, [decades])
+
+  const decadeReportOptions = {
     responsive: true,
     plugins: {
       legend: {
@@ -37,14 +70,12 @@ const ChartsPage = () => {
     },
   };
   
-  const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-  const data = {
+  const decadeData = {
     labels,
     datasets: [
       {
-        label: 'Month',
-        data: [12, 14, 9, 18, 24, 23, 44],
+        label: '# of employees',
+        data: values,
         backgroundColor: '#071D49D1',
       },
     ],
@@ -86,7 +117,10 @@ const ChartsPage = () => {
             <div className='chart-header'>
               <Typography.Title level={5}>Employees Joined</Typography.Title>
             </div>
-            <Bar options={options} data={data} />
+            <Bar 
+              options={decadeReportOptions} 
+              data={decadeData} 
+            />
           </Card>
         </Col>
         <Col sm={24} md={8}>

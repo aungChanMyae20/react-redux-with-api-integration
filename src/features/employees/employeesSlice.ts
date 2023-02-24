@@ -3,6 +3,7 @@ import { RootState } from '../../app/store';
 import { EmployeeProps } from "../../interfaces/employee";
 import EmployeesService from "../../api/employees";
 import { ListProps, PageInfoProps } from "../../interfaces/commons";
+import { getDecadeReports } from "../reports/reportsSlice";
 
 export interface EmployeesState {
   employees: EmployeeProps[]
@@ -31,9 +32,10 @@ export const getAllEmployees = createAsyncThunk (
 
 export const addNewEmployee = createAsyncThunk (
   "employee/new",
-  async (data: EmployeeProps, { rejectWithValue }) => {
+  async (data: EmployeeProps, { rejectWithValue, dispatch }) => {
     try {
       const response = await EmployeesService.createNewEmployee(data);
+      response.status === 200 && await dispatch(getDecadeReports())
       return response.data;
     } catch (err:any) {
       return rejectWithValue(err.response.data);
@@ -43,9 +45,10 @@ export const addNewEmployee = createAsyncThunk (
 
 export const updateEmployee = createAsyncThunk (
   "employee/edit",
-  async (data: EmployeeProps, { rejectWithValue }) => {
+  async (data: EmployeeProps, { rejectWithValue, dispatch }) => {
     try {
       const response = await EmployeesService.updateEmployee(data);
+      response.status === 200 && await dispatch(getDecadeReports())
       return response.data;
     } catch (err:any) {
       return rejectWithValue(err.response.data);
@@ -55,9 +58,10 @@ export const updateEmployee = createAsyncThunk (
 
 export const removeEmployee = createAsyncThunk (
   "employee/remove",
-  async ( id : string, { rejectWithValue }) => {
+  async ( id : string, { rejectWithValue, dispatch }) => {
     try {
       const response = await EmployeesService.removeEmployee(id);
+      response.status === 200 && await dispatch(getDecadeReports())
       return response.data;
     } catch (err:any) {
       return rejectWithValue(err.response.data);
@@ -97,7 +101,7 @@ export const employeesSlice = createSlice({
     [addNewEmployee.fulfilled]: (state, action) => {
       state.loading = false;
       // state.employees = [ ...state.employees, action.payload ]
-      state.pageInfo.total = action.payload.total
+      state.pageInfo.total = action.payload.total;
     },
     // @ts-expect-error
     [addNewEmployee.rejected]: (state, action) => {

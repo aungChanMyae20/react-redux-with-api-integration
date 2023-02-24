@@ -123,7 +123,10 @@ const Employees:FC = () => {
   // form submit
 
   const create = async (values:EmployeeProps) => {
-    const res = await dispatch(addNewEmployee(values))
+    const res = await dispatch(addNewEmployee({ 
+      ...values, 
+      joined_date: dayjs(values.joined_date).valueOf()
+    }))
     if (res) {
       message.success('Employee added')
       setShowForm(false)
@@ -132,7 +135,11 @@ const Employees:FC = () => {
   }
 
   const update = async (values:EmployeeProps) => {
-    const res = await dispatch(updateEmployee({ id: employee?.id, ...values}))
+    const res = await dispatch(updateEmployee({ 
+      id: employee?.id, 
+      ...values, 
+      joined_date: dayjs(values.joined_date).valueOf()
+    }))
     if (res) {
       message.success('Employee updated')
       setShowForm(false)

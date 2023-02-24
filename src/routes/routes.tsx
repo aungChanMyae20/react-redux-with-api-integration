@@ -7,6 +7,8 @@ import HomePage from '../pages/home';
 import ChartsPage from '../pages/chart';
 import PublicLayout from '../layouts/PublicLayout';
 import LoginPage from '../pages/login';
+import PageNotFound from '../pages/404';
+import Forbidden from '../pages/403';
 
 const routes: RouteObject[] = [
   {
@@ -27,11 +29,11 @@ const routes: RouteObject[] = [
       },
       {
         path: '404',
-        element: <div>Page not found - 404</div>
+        element: <PageNotFound />
       },
       {
         path: '403',
-        element: <div>Forbidden - 403</div>
+        element: <Forbidden />
       }
     ]
   },
@@ -49,13 +51,13 @@ const routes: RouteObject[] = [
       },
       {
         path: '404',
-        element: <div>Page not found - 404</div>
+        element: <PageNotFound />
       }
     ]
   },
   {
     path: '*',
-    element: <div>Page not found - 404</div>
+    element: <PageNotFound />
   }
 ];
 
